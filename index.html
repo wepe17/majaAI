@@ -1,0 +1,2132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAJA.AI — Majapahit Artificial Intelligence</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Dark Theme Colors - MAJA AI Style */
+            --bg-primary: #0f0f14;
+            --bg-secondary: #1a1a24;
+            --bg-tertiary: #222230;
+            --bg-card: #1e1e2e;
+            --bg-hover: #2a2a3a;
+            
+            /* Accent Colors */
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-teal: #14b8a6;
+            --accent-green: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
+            
+            /* Text Colors */
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-tertiary: #94a3b8;
+            --text-muted: #64748b;
+            
+            /* Border & Divider */
+            --border-color: #2d2d3d;
+            --border-light: #3a3a4a;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.7);
+            
+            /* Glow Effects */
+            --glow-primary: 0 0 20px rgba(99, 102, 241, 0.3);
+            --glow-success: 0 0 20px rgba(16, 185, 129, 0.3);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: var(--glow-primary);
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text .accent {
+            background: linear-gradient(135deg, var(--primary-light), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-subtitle {
+            font-size: 10px;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: -2px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .badge-demo {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--accent-green);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: none;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .btn-icon:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: var(--glow-primary);
+        }
+
+        /* Main Layout - 3 Columns */
+        .main-container {
+            display: grid;
+            grid-template-columns: 320px 1fr 300px;
+            height: calc(100vh - 69px);
+            max-width: 1800px;
+            margin: 0 auto;
+            gap: 0;
+        }
+
+        /* Left Sidebar - Upload */
+        .sidebar-left {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Right Sidebar - Analysis Type */
+        .sidebar-right {
+            background: var(--bg-secondary);
+            border-left: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .sidebar-header {
+            padding: 24px 20px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .source-upload {
+            background: var(--bg-tertiary);
+            border: 2px dashed var(--border-light);
+            border-radius: 12px;
+            padding: 28px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .source-upload::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .source-upload:hover::before {
+            opacity: 1;
+        }
+
+        .source-upload:hover {
+            border-color: var(--primary);
+            box-shadow: var(--glow-primary);
+        }
+
+        .source-upload-icon {
+            font-size: 42px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .source-upload-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .source-upload-hint {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        .btn-demo {
+            margin-top: 12px;
+            width: 100%;
+            padding: 11px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-demo:hover {
+            background: var(--bg-hover);
+            border-color: var(--primary);
+            color: var(--text-primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .file-list {
+            padding: 12px 20px;
+            max-height: 240px;
+            overflow-y: auto;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            margin-bottom: 8px;
+            transition: all 0.2s;
+        }
+
+        .file-item:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-light);
+        }
+
+        .file-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .file-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .file-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 2px;
+        }
+
+        .file-size {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .btn-remove {
+            width: 28px;
+            height: 28px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .btn-remove:hover {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--accent-red);
+        }
+
+        .sidebar-content {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .radio-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .radio-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), transparent);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .radio-card:hover {
+            border-color: var(--border-light);
+            box-shadow: var(--shadow-md);
+        }
+
+        .radio-card:hover::before {
+            opacity: 1;
+        }
+
+        .radio-card.active {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.08);
+            box-shadow: var(--glow-primary);
+        }
+
+        .radio-card.active::before {
+            opacity: 1;
+        }
+
+        .radio-card-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            position: relative;
+        }
+
+        .radio-indicator {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-light);
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 2px;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .radio-card.active .radio-indicator {
+            border-color: var(--primary);
+            background: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+        }
+
+        .radio-indicator::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.2s;
+        }
+
+        .radio-card.active .radio-indicator::after {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .radio-text {
+            flex: 1;
+        }
+
+        .radio-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .radio-desc {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            line-height: 1.5;
+        }
+
+        /* Chat Container */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-primary);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 28px;
+        }
+
+        .message {
+            max-width: 880px;
+            margin: 0 auto 28px;
+            animation: fadeInUp 0.4s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .message-avatar.user {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 2px solid var(--border-light);
+        }
+
+        .message-avatar.ai {
+            background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+            box-shadow: var(--glow-primary);
+        }
+
+        .message-author {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .message-content {
+            margin-left: 44px;
+        }
+
+        .message-content.user {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 16px 18px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+
+        /* Answer Box */
+        .answer-box {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-left: 4px solid var(--primary);
+            border-radius: 14px;
+            padding: 20px 22px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .answer-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .answer-box-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--primary-light);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+        }
+
+        .answer-box-content {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-primary);
+            position: relative;
+        }
+
+        .answer-box-content p {
+            margin-bottom: 12px;
+        }
+
+        .answer-box-content strong {
+            font-weight: 600;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--primary-light), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Data Section */
+        .data-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 20px;
+            transition: all 0.2s;
+        }
+
+        .data-section:hover {
+            border-color: var(--border-light);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .data-section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .data-section-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: var(--glow-primary);
+        }
+
+        .data-section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Chart Container */
+        .chart-container {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            height: 360px;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            overflow: hidden;
+            border-collapse: separate;
+            border-spacing: 0;
+            border: 1px solid var(--border-color);
+        }
+
+        table th {
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        table td {
+            padding: 14px 16px;
+            font-size: 13px;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        table tr:last-child td {
+            border-bottom: none;
+        }
+
+        table tr:hover {
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-badge.success {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .status-badge.warning {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent-amber);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .status-badge.danger {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--accent-red);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        /* Recommendation Card */
+        .rec-card {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--border-light);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 14px;
+            transition: all 0.2s;
+        }
+
+        .rec-card:hover {
+            border-color: var(--border-light);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .rec-card.high {
+            border-left-color: var(--accent-red);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .rec-card.medium {
+            border-left-color: var(--accent-amber);
+            background: rgba(245, 158, 11, 0.05);
+        }
+
+        .rec-card.low {
+            border-left-color: var(--accent-green);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .rec-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .rec-badge {
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .rec-badge.high {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--accent-red);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+
+        .rec-badge.medium {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--accent-amber);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+        }
+
+        .rec-badge.low {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+        }
+
+        .rec-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            flex: 1;
+        }
+
+        .rec-content {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 14px;
+        }
+
+        .rec-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        .rec-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Chat Input */
+        .chat-input-container {
+            border-top: 1px solid var(--border-color);
+            padding: 20px 28px 24px;
+            background: var(--bg-secondary);
+        }
+
+        .chat-input-wrapper {
+            max-width: 880px;
+            margin: 0 auto;
+        }
+
+        .example-prompts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .example-prompt {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 7px 14px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .example-prompt:hover {
+            background: var(--bg-hover);
+            border-color: var(--primary);
+            color: var(--text-primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .chat-input-box {
+            display: flex;
+            gap: 12px;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            padding: 10px 10px 10px 20px;
+            transition: all 0.2s;
+        }
+
+        .chat-input-box:focus-within {
+            border-color: var(--primary);
+            box-shadow: var(--glow-primary);
+        }
+
+        .chat-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: 14px;
+            color: var(--text-primary);
+            outline: none;
+            resize: none;
+            max-height: 140px;
+        }
+
+        .chat-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .btn-send {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            box-shadow: var(--glow-primary);
+        }
+
+        .btn-send:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-send:disabled {
+            background: var(--bg-card);
+            cursor: not-allowed;
+            opacity: 0.5;
+            box-shadow: none;
+        }
+
+        /* Empty State */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            padding: 60px 40px;
+        }
+
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin-bottom: 24px;
+            box-shadow: var(--glow-primary);
+        }
+
+        .empty-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .empty-desc {
+            font-size: 14px;
+            color: var(--text-tertiary);
+            max-width: 480px;
+            line-height: 1.7;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 5px;
+        }
+
+        .loading-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+            animation: bounce 1.4s infinite ease-in-out;
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+        }
+
+        .loading-dot:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-light);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 1280px) {
+            .main-container {
+                grid-template-columns: 280px 1fr 280px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 260px 1fr 260px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                display: flex;
+                flex-direction: column;
+            }
+            .sidebar-left,
+            .sidebar-right {
+                width: 100%;
+                border: none;
+                border-bottom: 1px solid var(--border-color);
+                max-height: 40vh;
+            }
+            .chat-messages {
+                padding: 20px 16px;
+            }
+            .chat-input-container {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">🏛️</div>
+            <div>
+                <div class="logo-text">MAJA<span class="accent">.AI</span></div>
+                <div class="logo-subtitle">Core AI Platform</div>
+            </div>
+        </div>
+        <div class="header-actions">
+            <span class="badge-demo">
+                <span class="material-icons-round" style="font-size: 14px;">science</span>
+                MODE DEMO
+            </span>
+            <button class="btn-icon" title="Notifikasi">
+                <span class="material-icons-round" style="font-size: 20px;">notifications_none</span>
+            </button>
+            <button class="btn-icon" title="Settings">
+                <span class="material-icons-round" style="font-size: 20px;">settings</span>
+            </button>
+            <div class="user-avatar" title="User Profile">U</div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Left Sidebar - Upload -->
+        <aside class="sidebar-left">
+            <div class="sidebar-header">
+                <div class="sidebar-title">
+                    <span class="material-icons-round" style="font-size: 16px;">cloud_upload</span>
+                    Sumber Data
+                </div>
+                <div class="source-upload" id="uploadArea">
+                    <div class="source-upload-icon">
+                        <span class="material-icons-round">upload_file</span>
+                    </div>
+                    <div class="source-upload-text">Upload Dokumen</div>
+                    <div class="source-upload-hint">PDF, Excel, CSV (Max 5 file, 50MB)</div>
+                    <input type="file" id="fileInput" multiple accept=".pdf,.xlsx,.xls,.csv" style="display: none;">
+                </div>
+                <button onclick="useDemoData()" class="btn-demo">
+                    <span class="material-icons-round" style="font-size: 18px;">auto_awesome</span>
+                    Gunakan Data Contoh
+                </button>
+            </div>
+
+            <div class="file-list" id="fileList"></div>
+        </aside>
+
+        <!-- Chat Container -->
+        <main class="chat-container">
+            <div class="chat-messages" id="chatMessages">
+                <div class="empty-state">
+                    <div class="empty-icon">💬</div>
+                    <div class="empty-title">Mulai Analisis dengan MAJA.AI</div>
+                    <div class="empty-desc">
+                        Upload dokumen Anda, pilih jenis analisis, dan ajukan pertanyaan. 
+                        AI akan memberikan jawaban lengkap dengan data, grafik, dan rekomendasi yang terstruktur.
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <div class="chat-input-wrapper">
+                    <div class="example-prompts">
+                        <button class="example-prompt" onclick="setPrompt('ipd')">
+                            💡 Berapa skor IPD dan bagaimana meningkatkannya?
+                        </button>
+                        <button class="example-prompt" onclick="setPrompt('smartcity')">
+                            💡 Buatkan roadmap Smart City 5 tahun
+                        </button>
+                        <button class="example-prompt" onclick="setPrompt('digital')">
+                            💡 Analisis transformasi digital daerah
+                        </button>
+                    </div>
+
+                    <div class="chat-input-box">
+                        <textarea 
+                            id="chatInput" 
+                            class="chat-input" 
+                            placeholder="Ajukan pertanyaan tentang data Anda..."
+                            rows="1"
+                        ></textarea>
+                        <button class="btn-send" id="sendBtn" onclick="sendMessage()">
+                            <span class="material-icons-round" style="font-size: 22px;">send</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Sidebar - Analysis Type -->
+        <aside class="sidebar-right">
+            <div class="sidebar-header">
+                <div class="sidebar-title">
+                    <span class="material-icons-round" style="font-size: 16px;">analytics</span>
+                    Jenis Analisis
+                </div>
+            </div>
+
+            <div class="sidebar-content">
+                <div class="radio-card active" onclick="selectAnalysis('ipd')" data-type="ipd">
+                    <div class="radio-card-content">
+                        <div class="radio-indicator"></div>
+                        <div class="radio-text">
+                            <div class="radio-title">📊 Analisis 47 Indikator IPD</div>
+                            <div class="radio-desc">Evaluasi mendalam Indeks Pemerintahan Digital</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="radio-card" onclick="selectAnalysis('smartcity')" data-type="smartcity">
+                    <div class="radio-card-content">
+                        <div class="radio-indicator"></div>
+                        <div class="radio-text">
+                            <div class="radio-title">🗺️ Roadmap Smart City</div>
+                            <div class="radio-desc">Penyusunan roadmap implementasi 1/3/5 tahun</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="radio-card" onclick="selectAnalysis('digital')" data-type="digital">
+                    <div class="radio-card-content">
+                        <div class="radio-indicator"></div>
+                        <div class="radio-text">
+                            <div class="radio-title">⚡ Demo Pemerintahan Digital</div>
+                            <div class="radio-desc">Transformasi digital pemerintahan</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Box -->
+                <div style="margin-top: 20px; padding: 16px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                        <span class="material-icons-round" style="font-size: 18px; color: var(--primary-light);">info</span>
+                        <h3 style="font-size: 13px; font-weight: 600; color: var(--text-primary);">Info Output</h3>
+                    </div>
+                    <ul style="font-size: 11px; color: var(--text-tertiary); line-height: 1.7; list-style: none; padding: 0;">
+                        <li style="margin-bottom: 6px;">✅ Jawaban langsung dari AI</li>
+                        <li style="margin-bottom: 6px;">✅ Grafik interaktif</li>
+                        <li style="margin-bottom: 6px;">✅ Tabel analisis detail</li>
+                        <li style="margin-bottom: 6px;">✅ Prediksi 5 tahun</li>
+                        <li>✅ Rekomendasi prioritas</li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        // Global State
+        let uploadedFiles = [];
+        let currentAnalysisType = 'ipd';
+        let charts = {};
+
+        // File Upload Handlers
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+
+        uploadArea.addEventListener('click', () => fileInput.click());
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = 'var(--primary)';
+            uploadArea.style.boxShadow = 'var(--glow-primary)';
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = 'var(--border-light)';
+            uploadArea.style.boxShadow = 'none';
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = 'var(--border-light)';
+            uploadArea.style.boxShadow = 'none';
+            handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+        function handleFiles(files) {
+            const maxFiles = 5;
+            for (let i = 0; i < files.length && uploadedFiles.length < maxFiles; i++) {
+                const file = files[i];
+                if (file.name.match(/\.(pdf|xlsx|xls|csv)$/i)) {
+                    uploadedFiles.push({
+                        id: Date.now() + i,
+                        name: file.name,
+                        size: file.size,
+                        file: file
+                    });
+                }
+            }
+            renderFileList();
+        }
+
+        function renderFileList() {
+            if (uploadedFiles.length === 0) {
+                fileList.innerHTML = '';
+                return;
+            }
+
+            fileList.innerHTML = uploadedFiles.map(file => `
+                <div class="file-item">
+                    <div class="file-icon">
+                        <span class="material-icons-round" style="font-size: 20px;">${getFileIcon(file.name)}</span>
+                    </div>
+                    <div class="file-info">
+                        <div class="file-name">${file.name}</div>
+                        <div class="file-size">${formatFileSize(file.size)}</div>
+                    </div>
+                    <button class="btn-remove" onclick="removeFile(${file.id})">
+                        <span class="material-icons-round" style="font-size: 18px;">close</span>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function removeFile(id) {
+            uploadedFiles = uploadedFiles.filter(f => f.id !== id);
+            renderFileList();
+        }
+
+        function getFileIcon(filename) {
+            if (filename.endsWith('.pdf')) return 'picture_as_pdf';
+            if (filename.match(/\.xlsx?$/)) return 'table_chart';
+            if (filename.endsWith('.csv')) return 'list_alt';
+            return 'description';
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+
+        function useDemoData() {
+            uploadedFiles = [{
+                id: Date.now(),
+                name: 'Data_IPD_Kabupaten_Contoh.xlsx',
+                size: 2457600,
+                file: null
+            }];
+            renderFileList();
+        }
+
+        // Analysis Type Selection
+        function selectAnalysis(type) {
+            currentAnalysisType = type;
+            document.querySelectorAll('.radio-card').forEach(card => card.classList.remove('active'));
+            document.querySelector(`.radio-card[data-type="${type}"]`).classList.add('active');
+        }
+
+        // Example Prompts
+        function setPrompt(type) {
+            const prompts = {
+                ipd: 'Berapa skor IPD daerah ini? Indikator mana yang paling lemah dan bagaimana cara meningkatkannya?',
+                smartcity: 'Buatkan roadmap Smart City untuk 5 tahun ke depan dengan program prioritas dan estimasi anggaran',
+                digital: 'Bagaimana kondisi transformasi digital pemerintahan daerah ini? Apa yang perlu diperbaiki?'
+            };
+            document.getElementById('chatInput').value = prompts[type];
+            document.getElementById('chatInput').focus();
+        }
+
+        // Send Message
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            if (uploadedFiles.length === 0) {
+                alert('Silakan upload dokumen atau gunakan data contoh terlebih dahulu');
+                return;
+            }
+
+            addMessage('user', message);
+            input.value = '';
+            
+            const loadingId = Date.now();
+            addLoadingMessage(loadingId);
+
+            await new Promise(resolve => setTimeout(resolve, 2500));
+
+            removeLoadingMessage(loadingId);
+            generateAIResponse(message, currentAnalysisType);
+        }
+
+        function addMessage(role, content) {
+            const chatMessages = document.getElementById('chatMessages');
+            const emptyState = chatMessages.querySelector('.empty-state');
+            if (emptyState) emptyState.remove();
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message';
+            
+            const avatar = role === 'user' ? '👤' : '🤖';
+            const author = role === 'user' ? 'Anda' : 'MAJA.AI';
+            const contentClass = role === 'user' ? 'user' : 'ai';
+
+            messageDiv.innerHTML = `
+                <div class="message-header">
+                    <div class="message-avatar ${role}">${avatar}</div>
+                    <div class="message-author">${author}</div>
+                    <div class="message-time">${new Date().toLocaleTimeString('id-ID', {hour: '2-digit', minute: '2-digit'})}</div>
+                </div>
+                <div class="message-content ${contentClass}">${content}</div>
+            `;
+
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addLoadingMessage(id) {
+            const chatMessages = document.getElementById('chatMessages');
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'message';
+            loadingDiv.id = `loading-${id}`;
+            loadingDiv.innerHTML = `
+                <div class="message-header">
+                    <div class="message-avatar ai">🤖</div>
+                    <div class="message-author">MAJA.AI</div>
+                </div>
+                <div class="message-content ai">
+                    <div class="loading">
+                        <span>Menganalisis data Anda</span>
+                        <div class="loading-dots">
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(loadingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function removeLoadingMessage(id) {
+            const loadingDiv = document.getElementById(`loading-${id}`);
+            if (loadingDiv) loadingDiv.remove();
+        }
+
+        function generateAIResponse(question, type) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message';
+
+            let content = '';
+            if (type === 'ipd') {
+                content = generateIPDResponse(question);
+            } else if (type === 'smartcity') {
+                content = generateSmartCityResponse(question);
+            } else {
+                content = generateDigitalGovResponse(question);
+            }
+
+            messageDiv.innerHTML = `
+                <div class="message-header">
+                    <div class="message-avatar ai">🤖</div>
+                    <div class="message-author">MAJA.AI</div>
+                    <div class="message-time">${new Date().toLocaleTimeString('id-ID', {hour: '2-digit', minute: '2-digit'})}</div>
+                </div>
+                <div class="message-content ai">${content}</div>
+            `;
+
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            setTimeout(() => {
+                if (type === 'ipd') renderIPDCharts();
+                else if (type === 'smartcity') renderSmartCityCharts();
+                else renderDigitalGovCharts();
+            }, 100);
+        }
+
+        // Response Generators (keeping the same content from previous version)
+        function generateIPDResponse(question) {
+            return `
+                <div class="answer-box">
+                    <div class="answer-box-title">
+                        <span class="material-icons-round" style="font-size: 20px;">lightbulb</span>
+                        Jawaban Langsung
+                    </div>
+                    <div class="answer-box-content">
+                        <p>Berdasarkan analisis data yang Anda upload, <strong>skor IPD daerah Anda saat ini adalah 72.5 dari 100</strong>. Ini menempatkan daerah Anda pada kategori <strong>"Baik"</strong> menurut standar Kementerian Kominfo.</p>
+                        <p><strong>3 indikator paling lemah</strong> yang perlu segera diperbaiki adalah:</p>
+                        <p>
+                            1️⃣ <strong>Keamanan Siber</strong> (skor 45) — sangat di bawah rata-rata nasional 68<br>
+                            2️⃣ <strong>Interoperabilitas Sistem</strong> (skor 52) — belum terintegrasi dengan baik<br>
+                            3️⃣ <strong>Kompetensi Digital ASN</strong> (skor 58) — perlu pelatihan intensif
+                        </p>
+                        <p>Untuk meningkatkan skor, saya rekomendasikan <strong>fokus pada 3 program prioritas</strong> dengan investasi total Rp 2.5M yang dapat meningkatkan skor menjadi <strong>82.3 dalam 2 tahun</strong>.</p>
+                    </div>
+                </div>
+
+                <div class="data-section">
+                    <div class="data-section-header">
+                        <div class="data-section-icon">
+                            <span class="material-icons-round">radar</span>
+                        </div>
+                        <div class="data-section-title">Overview Skor IPD per Dimensi</div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="data-section">
+                    <div class="data-section-header">
+                        <div class="data-section-icon">
+                            <span class="material-icons-round">bar_chart</span>
+                        </div>
+                        <div class="data-section-title">Indikator Terkuat & Terlemah</div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="data-section">
+                    <div class="data-section-header">
+                        <div class="data-section-icon">
+                            <span class="material-icons-round">table_chart</span>
+                        </div>
+                        <div class="data-section-title">Analisis Gap per Dimensi</div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Dimensi</th>
+                                <th>Skor Daerah</th>
+                                <th>Rata-rata Nasional</th>
+                                <th>Gap</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Tata Kelola</td>
+                                <td>78</td>
+                                <td>72</td>
+                                <td style="color: var(--accent-green);">+6</td>
+                                <td><span class="status-badge success">UNGGUL</span></td>
+                            </tr>
+                            <tr>
+                                <td>Infrastruktur</td>
+                                <td>82</td>
+                                <td>75</td>
+                                <td style="color: var(--accent-green);">+7</td>
+                                <td><span class="status-badge success">UNGGUL</span></td>
+                            </tr>
+                            <tr>
+                                <td>Sistem Informasi</td>
+                                <td>68</td>
+                                <td>73</td>
+                                <td style="color: var(--accent-red);">-5</td>
+                                <td><span class="status-badge warning">PERLU PERBAIKAN</span></td>
+                            </tr>
+                            <tr>
+                                <td>SDM Digital</td>
+                                <td>58</td>
+                                <td>70</td>
+                                <td style="color: var(--accent-red);">-12</td>
+                                <td><span class="status-badge danger">PRIORITAS TINGGI</span></td>
+                            </tr>
+                            <tr>
+                                <td>Layanan Publik</td>
+                                <td>75</td>
+                                <td>71</td>
+                                <td style="color: var(--accent-green);">+4</td>
+                                <td><span class="status-badge success">BAIK</span></td>
+                            </tr>
+                            <tr>
+                                <td>Keamanan Siber</td>
+                                <td>45</td>
+                                <td>68</td>
+                                <td style="color: var(--accent-red);">-23</td>
+                                <td><span class="status-badge danger">SANGAT MENDESAK</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="data-section">
+                    <div class="data-section-header">
+                        <div class="data-section-icon">
+                            <span class="material-icons-round">trending_up</span>
+                        </div>
+                        <div class="data-section-title">Prediksi Peningkatan IPD (2024-2028)</div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="lineChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="data-section">
+                    <div class="data-section-header">
+                        <div class="data-section-icon">
+                            <span class="material-icons-round">recommend</span>
+                        </div>
+                        <div class="data-section-title">Rekomendasi Prioritas</div>
+                    </div>
+                    
+                    <div class="rec-card high">
+                        <div class="rec-header">
+                            <span class="rec-badge high">PRIORITAS TINGGI</span>
+                            <div class="rec-title">🔒 Penguatan Keamanan Siber</div>
+                        </div>
+                        <div class="rec-content">
+                            Implementasi Security Operations Center (SOC) dan pelatihan tim IT untuk merespons ancaman siber. Gap -23 poin dari nasional menunjukkan kerentanan sistem yang harus segera diatasi.
+                        </div>
+                        <div class="rec-meta">
+                            <div class="rec-meta-item">
+                                <span class="material-icons-round" style="font-size: 14px;">payments</span>
+                                Rp 1.2M
+                            </div>
+                            <div class="rec-meta-item">
+                                <span class="material-icons-round" style="font-size: 14px;">schedule</span>
+                                6 bulan
+                            </div>
+                            <div class="rec-meta-item">
+                                <span class="material-icons-round" style="font-size: 14px;">show_chart</span>
+                                +15 poin
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rec-card medium">
+                        <div class="rec-header">
+                            <span class="rec-badge medium">PRIORITAS SEDANG</span>
+                            <div class="rec-title">👨‍💼 Pelatihan Kompetensi Digital ASN</div>
+                        </div>
+                        <div class="rec-content">
+                            Program sertifikasi digital untuk 200 ASN + platform e-learning internal untuk upskilling berkelanjutan.
+                        </div>
+                        <div class="rec-meta">
+                            <div class="rec-meta-item">
+                                <span class="material-icons-round" style="font-size: 14px;">payments</span>
+                                Rp 800K
+                            </div>
+                            <div class="rec-meta-item">
+                                <span class="material-icons-round" style="font-size: 14px;">schedule</span>
+                                1 tahun
+                            </div>
+                            <div class="rec-meta-item">
+                                <span class="material-icons-round" style="font-size: 14px;">show_chart</span>
+                                +10 poin
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rec-card low">
+                        <div class="rec-header">
+                            <span class="rec-badge low">JANGKA PANJANG</span>
+                            <div class="rec-title">🔗 Interoperabilitas Sistem Informasi</div>
+                        </div>
+                        <div class="rec-content">
+                            Integrasi 15 aplikasi pemerintahan dengan middleware berbasis API Gateway untuk data sharing antar SKPD.
+                        </div>
+                        <div class="rec-meta">
+                            <div class="rec-meta-item">
+                                <span class="material-icons-round" style="font-size: 14px;">payments</span>
+                                Rp 1.5M
+                            </div>
+                            <div class="rec-meta-item">
+                                <span class="material-icons-round" style="font-size: 14px;">schedule</span>
+                                18 bulan
+                            </div>
+                            <div class="rec-meta-item">
+                                <span class="material-icons-round" style="font-size: 14px;">show_chart</span>
+                                +12 poin
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateSmartCityResponse(question) {
+            return `
+                <div class="answer-box">
+                    <div class="answer-box-title">
+                        <span class="material-icons-round" style="font-size: 20px;">lightbulb</span>
+                        Jawaban Langsung
+                    </div>
+                    <div class="answer-box-content">
+                        <p>Untuk membangun Smart City yang berkelanjutan, saya telah menyusun <strong>roadmap 5 tahun</strong> dengan <strong>total investasi Rp 280 miliar</strong> yang terbagi dalam 3 fase implementasi.</p>
+                        <p>Berdasarkan analisis, daerah Anda berada di <strong>Level 2.8 dari 5.0</strong> dalam Smart City Maturity Index. Ada <strong>4 program prioritas cepat</strong> yang bisa dimulai dalam 6 bulan pertama dengan investasi minimal namun dampak tinggi terhadap kepuasan masyarakat.</p>
+                        <p>Fokus tahun pertama: <strong>Smart Governance & Smart Mobility</strong> dengan 7 quick-wins program senilai Rp 45M.</p>
+                    </div>
+                </div>
+
+                <div class="data-section">
+                    <div class="data-section-header">
+                        <div class="data-section-icon">
+                            <span class="material-icons-round">radar</span>
+                        </div>
+                        <div class="data-section-title">Smart City Maturity Profile</div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="radarChartSC"></canvas>
+                    </div>
+                </div>
+
+                <div class="data-section">
+                    <div class="data-section-header">
+                        <div class="data-section-icon">
+                            <span class="material-icons-round">table_chart</span>
+                        </div>
+                        <div class="data-section-title">Roadmap Implementasi</div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fase</th>
+                                <th>Program Utama</th>
+                                <th>Investasi</th>
+                                <th>Target Level</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Tahun 1</strong></td>
+                                <td>Smart Governance Portal, IoT Parking, Command Center</td>
+                                <td>Rp 45M</td>
+                                <td>Level 3.2</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Tahun 2-3</strong></td>
+                                <td>Smart Traffic, Smart Waste, Public WiFi Expansion</td>
+                                <td>Rp 120M</td>
+                                <td>Level 3.9</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Tahun 4-5</strong></td>
+                                <td>AI Analytics, Smart Energy Grid, Integrated Control</td>
+                                <td>Rp 280M</td>
+                                <td>Level 4.5</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="data-section">
+                    <div class="data-section-header">
+                        <div class="data-section-icon">
+                            <span class="material-icons-round">donut_small</span>
+                        </div>
+                        <div class="data-section-title">Distribusi Investasi per Dimensi</div>
+                    </div>
+                    <div class="chart-container" style="height: 320px;">
+                        <canvas id="pieChartSC"></canvas>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateDigitalGovResponse(question) {
+            return `
+                <div class="answer-box">
+                    <div class="answer-box-title">
+                        <span class="material-icons-round" style="font-size: 20px;">lightbulb</span>
+                        Jawaban Langsung
+                    </div>
+                    <div class="answer-box-content">
+                        <p>Kondisi transformasi digital pemerintahan daerah Anda saat ini berada di <strong>tahap awal-menengah</strong>. Dari 90 layanan total, baru <strong>23 layanan (25.6%) yang terdigitalisasi</strong>, sedangkan 67 layanan masih manual atau semi-manual.</p>
+                        <p><strong>Masalah utama yang perlu diperbaiki:</strong></p>
+                        <p>
+                            1️⃣ <strong>Fragmentasi sistem</strong> — 23 aplikasi tidak terintegrasi<br>
+                            2️⃣ <strong>Adopsi rendah</strong> — hanya 34% masyarakat menggunakan layanan digital<br>
+                            3️⃣ <strong>Kualitas UX buruk</strong> — komplain tinggi pada 8 dari 23 layanan
+                        </p>
+                        <p>Saya rekomendasikan <strong>strategi 3 fase dalam 2 tahun</strong> untuk mencapai <strong>77 layanan digital (85.6%)</strong> dengan fokus integrasi, peningkatan UX, dan kampanye adopsi.</p>
+                    </div>
+                </div>
+
+                <div class="data-section">
+                    <div class="data-section-header">
+                        <div class="data-section-icon">
+                            <span class="material-icons-round">donut_small</span>
+                        </div>
+                        <div class="data-section-title">Status Digitalisasi Layanan</div>
+                    </div>
+                    <div class="chart-container" style="height: 320px;">
+                        <canvas id="doughnutChartDG"></canvas>
+                    </div>
+                </div>
+
+                <div class="data-section">
+                    <div class="data-section-header">
+                        <div class="data-section-icon">
+                            <span class="material-icons-round">compare</span>
+                        </div>
+                        <div class="data-section-title">Perbandingan Sebelum vs Target</div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="barChartDG"></canvas>
+                    </div>
+                </div>
+
+                <div class="data-section">
+                    <div class="data-section-header">
+                        <div class="data-section-icon">
+                            <span class="material-icons-round">trending_up</span>
+                        </div>
+                        <div class="data-section-title">Proyeksi Peningkatan Layanan Digital</div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="lineChartDG"></canvas>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Chart Rendering (keeping same chart code but with updated colors for dark theme)
+        function renderIPDCharts() {
+            const radarCtx = document.getElementById('radarChart');
+            if (radarCtx) {
+                charts.radar = new Chart(radarCtx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Tata Kelola', 'Infrastruktur', 'Sistem Informasi', 'SDM Digital', 'Layanan Publik', 'Keamanan Siber'],
+                        datasets: [{
+                            label: 'Skor Daerah',
+                            data: [78, 82, 68, 58, 75, 45],
+                            backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                            borderColor: '#6366f1',
+                            pointBackgroundColor: '#6366f1',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: '#6366f1'
+                        }, {
+                            label: 'Rata-rata Nasional',
+                            data: [72, 75, 73, 70, 71, 68],
+                            backgroundColor: 'rgba(20, 184, 166, 0.2)',
+                            borderColor: '#14b8a6',
+                            pointBackgroundColor: '#14b8a6',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: '#14b8a6'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: { 
+                                    color: '#64748b',
+                                    backdropColor: 'transparent',
+                                    stepSize: 20
+                                },
+                                grid: { color: '#2d2d3d' },
+                                pointLabels: { 
+                                    color: '#cbd5e1',
+                                    font: { size: 11 }
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: { 
+                                labels: { 
+                                    color: '#cbd5e1',
+                                    font: { size: 12 }
+                                } 
+                            }
+                        }
+                    }
+                });
+            }
+
+            const barCtx = document.getElementById('barChart');
+            if (barCtx) {
+                charts.bar = new Chart(barCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Infrastruktur TI', 'Tata Kelola', 'Layanan Publik', 'Sistem Info', 'SDM Digital', 'Keamanan'],
+                        datasets: [{
+                            label: 'Skor',
+                            data: [82, 78, 75, 68, 58, 45],
+                            backgroundColor: [
+                                '#10b981', '#10b981', '#10b981',
+                                '#f59e0b', '#ef4444', '#ef4444'
+                            ]
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { 
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: { color: '#64748b' },
+                                grid: { color: '#2d2d3d' }
+                            },
+                            y: { 
+                                ticks: { color: '#cbd5e1' },
+                                grid: { color: '#2d2d3d' }
+                            }
+                        },
+                        plugins: { 
+                            legend: { display: false }
+                        }
+                    }
+                });
+            }
+
+            const lineCtx = document.getElementById('lineChart');
+            if (lineCtx) {
+                charts.line = new Chart(lineCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['2024', '2025', '2026', '2027', '2028'],
+                        datasets: [{
+                            label: 'Skenario Optimis',
+                            data: [72.5, 78.2, 82.6, 86.1, 89.2],
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.4
+                        }, {
+                            label: 'Skenario Moderat',
+                            data: [72.5, 76.8, 80.2, 83.5, 86.3],
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                            tension: 0.4
+                        }, {
+                            label: 'Target Nasional',
+                            data: [70, 75, 78, 82, 85],
+                            borderColor: '#6366f1',
+                            borderDash: [5, 5],
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { 
+                                ticks: { color: '#64748b' },
+                                grid: { color: '#2d2d3d' }
+                            },
+                            y: { 
+                                beginAtZero: false,
+                                min: 60,
+                                max: 100,
+                                ticks: { color: '#64748b' },
+                                grid: { color: '#2d2d3d' }
+                            }
+                        },
+                        plugins: { 
+                            legend: { 
+                                labels: { color: '#cbd5e1' } 
+                            } 
+                        }
+                    }
+                });
+            }
+        }
+
+        function renderSmartCityCharts() {
+            const radarCtx = document.getElementById('radarChartSC');
+            if (radarCtx) {
+                charts.radarSC = new Chart(radarCtx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Smart Governance', 'Smart Economy', 'Smart Mobility', 'Smart Environment', 'Smart People', 'Smart Living'],
+                        datasets: [{
+                            label: 'Level Saat Ini',
+                            data: [3.2, 2.1, 2.8, 2.5, 3.0, 2.6],
+                            backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                            borderColor: '#6366f1',
+                            pointBackgroundColor: '#6366f1'
+                        }, {
+                            label: 'Target 5 Tahun',
+                            data: [4.5, 4.2, 4.3, 4.0, 4.4, 4.1],
+                            backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                            borderColor: '#10b981',
+                            pointBackgroundColor: '#10b981'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: 5,
+                                ticks: { 
+                                    stepSize: 1,
+                                    color: '#64748b',
+                                    backdropColor: 'transparent'
+                                },
+                                grid: { color: '#2d2d3d' },
+                                pointLabels: { 
+                                    color: '#cbd5e1',
+                                    font: { size: 10 }
+                                }
+                            }
+                        },
+                        plugins: { 
+                            legend: { 
+                                labels: { color: '#cbd5e1' } 
+                            } 
+                        }
+                    }
+                });
+            }
+
+            const pieCtx = document.getElementById('pieChartSC');
+            if (pieCtx) {
+                charts.pieSC = new Chart(pieCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Governance', 'Mobility', 'Infrastructure', 'Environment', 'People', 'Economy'],
+                        datasets: [{
+                            data: [45, 75, 60, 35, 40, 25],
+                            backgroundColor: [
+                                '#6366f1', '#10b981', '#8b5cf6',
+                                '#14b8a6', '#f59e0b', '#ef4444'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { 
+                            legend: { 
+                                position: 'right',
+                                labels: { color: '#cbd5e1' } 
+                            } 
+                        }
+                    }
+                });
+            }
+        }
+
+        function renderDigitalGovCharts() {
+            const doughnutCtx = document.getElementById('doughnutChartDG');
+            if (doughnutCtx) {
+                charts.doughnutDG = new Chart(doughnutCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Layanan Digital (23)', 'Layanan Manual (67)'],
+                        datasets: [{
+                            data: [23, 67],
+                            backgroundColor: ['#10b981', '#ef4444']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { 
+                            legend: { 
+                                position: 'bottom',
+                                labels: { color: '#cbd5e1' } 
+                            } 
+                        }
+                    }
+                });
+            }
+
+            const barCtx = document.getElementById('barChartDG');
+            if (barCtx) {
+                charts.barDG = new Chart(barCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Perizinan', 'Administrasi', 'Pengaduan', 'Informasi', 'Pembayaran'],
+                        datasets: [{
+                            label: 'Sekarang',
+                            data: [8, 6, 3, 4, 2],
+                            backgroundColor: '#ef4444'
+                        }, {
+                            label: 'Target 2028',
+                            data: [18, 15, 12, 16, 16],
+                            backgroundColor: '#10b981'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { 
+                                ticks: { color: '#64748b' },
+                                grid: { color: '#2d2d3d' }
+                            },
+                            y: { 
+                                beginAtZero: true,
+                                ticks: { color: '#64748b' },
+                                grid: { color: '#2d2d3d' }
+                            }
+                        },
+                        plugins: { 
+                            legend: { 
+                                labels: { color: '#cbd5e1' } 
+                            } 
+                        }
+                    }
+                });
+            }
+
+            const lineCtx = document.getElementById('lineChartDG');
+            if (lineCtx) {
+                charts.lineDG = new Chart(lineCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['2024', '2025', '2026', '2027', '2028'],
+                        datasets: [{
+                            label: 'Layanan Digital',
+                            data: [23, 35, 48, 62, 77],
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { 
+                                ticks: { color: '#64748b' },
+                                grid: { color: '#2d2d3d' }
+                            },
+                            y: { 
+                                beginAtZero: true,
+                                max: 90,
+                                ticks: { color: '#64748b' },
+                                grid: { color: '#2d2d3d' }
+                            }
+                        },
+                        plugins: { 
+                            legend: { 
+                                labels: { color: '#cbd5e1' } 
+                            } 
+                        }
+                    }
+                });
+            }
+        }
+
+        // Chat input auto-resize
+        const chatInput = document.getElementById('chatInput');
+        chatInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+
+        // Enter to send
+        chatInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
